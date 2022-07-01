@@ -14,7 +14,7 @@ import (
 type Config struct {
 	Store Store
 
-	prefix string
+	Prefix string
 
 	Serializer Serializer
 }
@@ -52,7 +52,7 @@ func New(conf *Config) *Cache {
 
 	return &Cache{
 		store:      conf.Store,
-		prefix:     conf.prefix,
+		prefix:     conf.Prefix,
 		Serializer: conf.Serializer,
 	}
 }
