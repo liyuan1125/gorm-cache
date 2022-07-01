@@ -14,6 +14,8 @@ import (
 type Config struct {
 	Store Store
 
+	prefix string
+
 	Serializer Serializer
 }
 
@@ -35,6 +37,8 @@ type Cache struct {
 	store Store
 
 	Serializer Serializer
+
+	prefix string
 }
 
 func New(conf *Config) *Cache {
@@ -82,7 +86,7 @@ func (p *Cache) Query(tx *gorm.DB) {
 
 	// 是否有自定义key
 	if key, hasKey = FromKey(ctx); !hasKey {
-		key = generateKey(tx.Statement.SQL.String())
+		key = p.prefix + generateKey(tx.Statement.SQL.String())
 	}
 
 	// 查询缓存数据
