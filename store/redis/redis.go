@@ -11,6 +11,12 @@ type Store struct {
 	store *redis.Client
 }
 
+func New(conf *redis.Options) *Store {
+	cli := redis.NewClient(conf)
+
+	return &Store{store: cli}
+}
+
 func NewWithDb(tx *redis.Client) *Store {
 	return &Store{store: tx}
 }
