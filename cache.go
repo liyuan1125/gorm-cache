@@ -50,7 +50,11 @@ func New(conf *Config) *Cache {
 		conf.Serializer = &DefaultJSONSerializer{}
 	}
 
-	return &Cache{store: conf.Store, Serializer: conf.Serializer}
+	return &Cache{
+		store:      conf.Store,
+		prefix:     conf.prefix,
+		Serializer: conf.Serializer,
+	}
 }
 
 func (p *Cache) Name() string {
