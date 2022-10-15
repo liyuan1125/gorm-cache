@@ -121,7 +121,8 @@ func (p *Cache) Query(tx *gorm.DB) {
 	}
 
 	// 查询缓存数据
-	if err := p.QueryCache(ctx, key, &tx.Statement.Dest); err == nil {
+
+	if err := p.QueryCache(ctx, key, tx.Statement.Dest); err == nil {
 		return
 	}
 
@@ -167,11 +168,16 @@ func (p *Cache) QueryDB(tx *gorm.DB) {
 // @param key
 // @param dest
 func (p *Cache) QueryCache(ctx context.Context, key string, dest any) error {
+
 	values, err := p.store.Get(ctx, key)
 	if err != nil {
 		return err
 	}
 
+	switch dest.(type) {
+	case *int64:
+		dest = 0
+	}
 	return p.Serializer.Deserialize(values, dest)
 }
 

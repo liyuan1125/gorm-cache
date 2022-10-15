@@ -1,6 +1,8 @@
 package cache
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type DefaultJSONSerializer struct{}
 
@@ -16,5 +18,6 @@ func (d *DefaultJSONSerializer) Serialize(v any) ([]byte, error) {
 // @param v
 // @date 2022-07-02 08:12:25
 func (d *DefaultJSONSerializer) Deserialize(data []byte, v any) error {
+
 	return json.Unmarshal(data, v)
 }
