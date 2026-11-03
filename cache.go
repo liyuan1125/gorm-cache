@@ -9,6 +9,7 @@ import (
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/callbacks"
+	"gorm.io/gorm/logger"
 )
 
 type Config struct {
@@ -115,9 +116,15 @@ func (p *Cache) Query(tx *gorm.DB) {
 	// 调用 Gorm的方法生产SQL
 	callbacks.BuildQuerySQL(tx)
 
+	sql := tx.Statement.SQL.String()
+	vars := tx.Statement.Vars
+
+	// 用于将参数填充进sql中，比如将"LIMIT = ?"解析成"LIMIT = 2"。
+	sql = logger.ExplainSQL(sql, nil, `"`, vars...)
+
 	// 是否有自定义key
 	if key, hasKey = FromKey(ctx); !hasKey {
-		key = p.prefix + generateKey(tx.Statement.SQL.String())
+		key = p.prefix + generateKey(sql)
 	}
 
 	// 查询缓存数据
